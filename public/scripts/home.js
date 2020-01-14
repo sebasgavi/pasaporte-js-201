@@ -19,8 +19,11 @@ function fetchMovies(query){
             article.innerHTML = `
                 <img src="https://source.unsplash.com/random/300x200?v=${movie._id}" class="card-img-top" alt="">
                 <div class="card-body">
-                    <h5 class="card-title">${movie.original_title}</h5>
-                    <p class="card-text">${movie.overview.substring(0, 150)}</p>
+                    <h5 class="card-title">${movie.original_title} (${movie.release_year})</h5>
+                    <p class="card-text">
+                        <strong>${movie.genres}</strong><br>
+                        ${movie.overview.substring(0, 150)}
+                    </p>
                     <a href="#" class="btn btn-primary">Go somewhere</a>
                 </div>
             `;
@@ -36,5 +39,5 @@ fetchMovies('');
 const form = document.querySelector('#filter-form');
 form.addEventListener('submit', function(event){
     event.preventDefault();
-    fetchMovies('?year=' + form.year.value);
+    fetchMovies('?year=' + form.year.value + '&genre=' + form.genre.value);
 });
