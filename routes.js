@@ -1,5 +1,6 @@
 const assert = require('assert');
 const path = require('path');
+const ObjectID = require('mongodb').ObjectID;
 
 function setRoutes(app, db) {
     app.get('/', function(req, res){
@@ -29,6 +30,36 @@ function setRoutes(app, db) {
             assert.equal(null, err);
             res.send(list);
         });
+    });
+
+    app.put('/api/1/movies/:id', function(req, res) {
+        const find = {
+            _id: new ObjectID(req.params.id)
+        };
+
+        const movies = db.collection('movies');
+        movies
+        .find(find)
+        .toArray(function(err, arr){
+            assert.equal(null, err);
+            console.log(arr);
+
+            var likes = arr[0].likes || 0;
+            if(req.query.type == 'like'){
+                likes++;
+            } else {
+                likes--;
+            }
+
+            movies.update(find, {
+                ...arr[0],
+                likes: likes
+            }, function(err, info){
+                res.send({
+                    likes: likes
+                });
+            });
+        })
     });
 }
 

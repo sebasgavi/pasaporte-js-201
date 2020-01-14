@@ -24,12 +24,38 @@ function fetchMovies(query){
                         <strong>${movie.genres}</strong><br>
                         ${movie.overview.substring(0, 150)}
                     </p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <button class="btn btn-danger">Dislike</button>
+                    <span class="badge badge-secondary">${movie.likes || 0}</span>
+                    <button class="btn btn-success">Like</button>
                 </div>
             `;
-
             col.appendChild(article);
             container.appendChild(col);
+
+            function updateLikes(likes){
+                article.querySelector('.badge').innerText = likes;
+            }
+            
+            article.querySelector('.btn-danger')
+                .addEventListener('click', function() {
+                    fetch('/api/1/movies/' + movie._id + '?type=dislike', {
+                        method: 'PUT'
+                    }).then(function(raw){
+                        return raw.json();
+                    }).then(function(json){
+                        updateLikes(json.likes);
+                    });
+                });
+            article.querySelector('.btn-success')
+                .addEventListener('click', function() {
+                    fetch('/api/1/movies/' + movie._id + '?type=like', {
+                        method: 'PUT'
+                    }).then(function(raw){
+                        return raw.json();
+                    }).then(function(json){
+                        updateLikes(json.likes);
+                    });
+                });
         });
     });
 }
