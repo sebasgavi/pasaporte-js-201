@@ -8,13 +8,25 @@ function setRoutes(app, db) {
     });
     
     app.get('/api/1/movies', function(req, res){
+        console.log(req.query);
+        const filters = {};
+
+        if(req.query.year){
+            filters.release_year = parseInt(req.query.year);
+        }
+
+        if(req.query.genre){
+            filters.genres = {
+                $regex: new RegExp(req.query.genre),
+            }
+        }
+
         const movies = db.collection('movies');
         movies
-        .find()
+        .find(filters)
         .limit(10)
         .toArray(function(err, list){
             assert.equal(null, err);
-            console.log(list);
             res.send(list);
         });
     });
