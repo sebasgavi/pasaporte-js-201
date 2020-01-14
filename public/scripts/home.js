@@ -2,12 +2,13 @@ console.log('Hello world');
 
 const container = document.querySelector('#main-container');
 
-fetch('/api/1/movies')
+function fetchMovies(query){
+    fetch('/api/1/movies' + query)
     .then(function(raw){
         return raw.json();
     })
     .then(function(json){
-        console.log(json);
+        container.innerHTML = '';
         json.forEach(function(movie, index){
             const col = document.createElement('div');
             col.classList.add('col-4');
@@ -28,10 +29,12 @@ fetch('/api/1/movies')
             container.appendChild(col);
         });
     });
+}
 
+fetchMovies('');
 
 const form = document.querySelector('#filter-form');
 form.addEventListener('submit', function(event){
     event.preventDefault();
-    console.log(form.year.value);
+    fetchMovies('?year=' + form.year.value);
 });
