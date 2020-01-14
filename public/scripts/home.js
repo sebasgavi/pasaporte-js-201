@@ -14,6 +14,7 @@ fetch('/api/1/movies')
             
             const article = document.createElement('article');
             article.classList.add('card');
+            article.classList.add('mb-4');
             article.innerHTML = `
                 <img src="https://source.unsplash.com/random/300x200?v=${movie._id}" class="card-img-top" alt="">
                 <div class="card-body">
@@ -26,4 +27,11 @@ fetch('/api/1/movies')
             col.appendChild(article);
             container.appendChild(col);
         });
-    })
+    });
+
+
+const form = document.querySelector('#filter-form');
+form.addEventListener('submit', function(event){
+    event.preventDefault();
+    console.log(form.year.value);
+});
